@@ -1,0 +1,28 @@
+.app {
+    padding: 10px;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.game-side-panel {
+
+}
+
+.game-panel {
+
+}
+
+.left-game-panel {
+}
+
+.center-game-panel {
+}
+
+.right-game-panel {
+}
+
