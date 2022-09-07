@@ -12,6 +12,8 @@
     "vite": "^3.0.0"
   },
   "dependencies": {
+    "@pixi/math": "^6.5.1",
+    "@pixi/math-extras": "^6.5.1",
     "pixi.js": "^6.5.1"
   }
 }

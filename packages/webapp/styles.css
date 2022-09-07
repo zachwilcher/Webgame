@@ -3,26 +3,23 @@
 }
 
 .game-container {
+}
+
+.game-container canvas {
+}
+.game-hud {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.top-buttons {
     display: flex;
-    flex-direction: row;
+    align-items: center;
     justify-content: center;
-    align-items: flex-start;
 }
-
-.game-side-panel {
-
+.bottom-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
-.game-panel {
-
-}
-
-.left-game-panel {
-}
-
-.center-game-panel {
-}
-
-.right-game-panel {
-}
-

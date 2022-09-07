@@ -9,20 +9,23 @@
 <body>
 <div class="app">
     <header>
-
+        <button type="button" id="fullscreen">Fullscreen</button>
     </header>
     <main>
-    <div class="game-container">
-        <div class="left-game-panel game-panel game-side-panel">
-            <input type="number" name="moveSpeed" />
-        </div>
-        <div class="center-game-panel game-panel">
+        <div class="game-container" id="game-container">
+            <div class="game-hud">
+                <div class="top-buttons">
+                    <button type="button" id="build">Build</button>
+                    <button type="button" id="fly">Fly</button>
+                </div>
+                <div class="bottom-buttons">
+                    <button type="button">Bottom 1</button>
+                    <button type="button">Bottom 2</button>
+                    <button type="button">Bottom 3</button>
+                </div>
+            </div>
             <canvas id="game-canvas">The canvas element is not rendered.</canvas>
         </div>
-        <div class="right-game-panel game-panel game-side-panel">
-
-        </div>
-    </div>
     </main>
     <footer>
 
