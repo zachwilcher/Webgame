@@ -1,11 +1,11 @@
 import * as PIXI from "pixi.js";
-import {TileGrid} from "./tile.js";
-import {Sprite} from "pixi.js";
+import { TileGrid } from "./tile.js";
+import { Sprite } from "pixi.js";
 
 
 export const GAME_MODES = {
-    FLY: "fly",
-    BUILD: "build"
+    FLY: "FLY",
+    BUILD: "BUILD"
 };
 
 export class Game {
@@ -51,6 +51,7 @@ export class Game {
         ornateSprite.interactive = true;
         ornateSprite.buttonMode = true;
         ornateSprite.addListener('pointertap', () => {
+            console.log('ornateSprite pointertap');
             selectedTexture = ornateTileTexture;
         })
         app.stage.addChild(ornateSprite);
@@ -71,6 +72,7 @@ export class Game {
 
 
         app.stage.addListener('pointertap', (event) => {
+            console.log('app.stage pointertap');
             const pos = tileGrid.toLocal(event.data.global);
             const tile = tileGrid.getTile(pos);
             if (!tile) {
