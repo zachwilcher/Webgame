@@ -1,7 +1,7 @@
-import { Container } from '@pixi/display';
+import * as PIXI from 'pixi.js';
 import {TILE_SIZE} from "./tile.js";
 
-export class TileGrid extends Container {
+export class TileGrid extends PIXI.Container {
 
     constructor() {
         super();

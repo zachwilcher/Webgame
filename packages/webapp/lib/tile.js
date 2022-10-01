@@ -1,4 +1,4 @@
-import { Sprite } from '@pixi/sprite';
+import * as PIXI from 'pixi.js';
 import { degrees, radians } from "./math.js";
 
 export const TILE_SIZE = 10;
@@ -20,7 +20,7 @@ export class TileType {
      * @returns {PIXI.Sprite}
      */
     sprite() {
-        const sprite = new Sprite(this.texture);
+        const sprite = new PIXI.Sprite(this.texture);
 
 
         return sprite;

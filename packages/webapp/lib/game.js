@@ -1,9 +1,7 @@
 import {TileBuilder, TileType} from "./tile.js";
 import {TileGrid} from "./tileGrid.js";
-import { Application } from "@pixi/app";
-import { Texture } from "@pixi/core";
+import * as PIXI from 'pixi.js';
 
-import '@pixi/events';
 
 export const GAME_MODES = {
     FLY: "FLY",
@@ -30,12 +28,12 @@ export class Game {
 
     constructor({view, resizeTo, backgroundColor}) {
 
-        const app = new Application({view, backgroundColor, resizeTo});
+        const app = new PIXI.Application({view, backgroundColor, resizeTo});
         this.app = app;
 
-        const borderedTileTexture = Texture.from('./assets/borderTile.png');
-        const ornateTileTexture = Texture.from('./assets/ornateTile.png');
-        const blankTileTexture = Texture.from('./assets/blankTile.png');
+        const borderedTileTexture = PIXI.Texture.from('./assets/borderTile.png');
+        const ornateTileTexture = PIXI.Texture.from('./assets/ornateTile.png');
+        const blankTileTexture = PIXI.Texture.from('./assets/blankTile.png');
 
         const borderedTileType = new TileType(borderedTileTexture);
         const ornateTileType = new TileType(ornateTileTexture);
@@ -54,21 +52,21 @@ export class Game {
 
         let sprite;
         sprite = tileBuilder.createAt(0, 50);
-        sprite.addEventListener('pointertap', event => {
+        sprite.addListener('pointertap', event => {
             tileBuilder.tileType = borderedTileType;
         });
         app.stage.addChild(sprite);
 
         tileBuilder.tileType = ornateTileType;
         sprite = tileBuilder.createAt(0, 150);
-        sprite.addEventListener('pointertap', event => {
+        sprite.addListener('pointertap', event => {
             tileBuilder.tileType = ornateTileType;
         });
         app.stage.addChild(sprite);
 
         tileBuilder.tileType = blankTileType;
         sprite = tileBuilder.createAt(0, 250);
-        sprite.addEventListener('pointertap', event => {
+        sprite.addListener('pointertap', event => {
             tileBuilder.tileType = blankTileType;
         });
         app.stage.addChild(sprite);
@@ -83,7 +81,7 @@ export class Game {
         app.stage.addChild(tileGrid);
 
 
-        app.stage.addEventListener('pointertap', event => {
+        app.stage.addListener('pointertap', event => {
             console.log(event.data.global);
             const pos = tileGrid.toLocal(event.data.global);
             const tile = tileGrid.getTile(pos);
