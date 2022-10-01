@@ -1,7 +1,9 @@
 import {TileBuilder, TileType} from "./tile.js";
 import {TileGrid} from "./tileGrid.js";
-import { Application } from '@pixi/app';
+import { Application } from "@pixi/app";
 import { Texture } from "@pixi/core";
+
+import '@pixi/events';
 
 export const GAME_MODES = {
     FLY: "FLY",
@@ -67,7 +69,6 @@ export class Game {
         tileBuilder.tileType = blankTileType;
         sprite = tileBuilder.createAt(0, 250);
         sprite.addEventListener('pointertap', event => {
-            console.log('blank tile tapped');
             tileBuilder.tileType = blankTileType;
         });
         app.stage.addChild(sprite);
