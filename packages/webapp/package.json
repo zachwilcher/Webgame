@@ -12,8 +12,12 @@
     "vite": "^3.0.0"
   },
   "dependencies": {
+    "@pixi/app": "^6.5.5",
+    "@pixi/core": "^6.5.5",
+    "@pixi/display": "^6.5.5",
+    "@pixi/events": "^6.5.5",
     "@pixi/math": "^6.5.1",
     "@pixi/math-extras": "^6.5.1",
-    "pixi.js": "^6.5.1"
+    "@pixi/sprite": "^6.5.5"
   }
 }

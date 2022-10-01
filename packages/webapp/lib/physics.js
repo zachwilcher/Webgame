@@ -1,6 +1,5 @@
 
-import { Point, IPointData } from '@pixi/math';
-import '@pixi/math-extras';
+import {Vec2} from "./math.js";
 
 export const MIN_VELOCITY_MAGNITUDE = .01;
 export const MIN_VELOCITY_MAGNITUDE_SQUARED = MIN_VELOCITY_MAGNITUDE * MIN_VELOCITY_MAGNITUDE;
@@ -8,17 +7,17 @@ export const MIN_ROTATION_VELOCITY_MAGNITUDE = .001;
 
 
 export class PhysicsObject {
-    position = new Point(0, 0);
-    velocity = new Point(0, 0);
+    position = new Vec2(0, 0);
+    velocity = new Vec2(0, 0);
     rotation = 0;
     rotationVelocity = 0;
 
     update(dt) {
-        this.position.add(this.velocity.multiplyScalar(dt), this.position);
+        this.position = this.position.add(this.velocity.scale(dt));
         this.rotation += this.rotationVelocity * dt;
 
         if(this.velocity.magnitudeSquared() < MIN_VELOCITY_MAGNITUDE_SQUARED) {
-            this.velocity = new Point(0, 0);
+            this.velocity = new Vec2(0, 0);
         }
 
         if(Math.abs(this.rotationVelocity) < MIN_ROTATION_VELOCITY_MAGNITUDE) {
@@ -27,16 +26,13 @@ export class PhysicsObject {
     }
 
     /**
-     * @param {IPointData} [outPoint]
-     * @returns {IPointData} Unit vector in direction this object is rotated
+     * @param {Vec2} [out]
+     * @returns {Vec2} Unit vector in direction this object is rotated
      */
-    direction(outPoint) {
-        if(!outPoint) {
-            outPoint = new Point();
-        }
-        outPoint.x = Math.cos(this.rotation);
-        outPoint.y = Math.sin(this.rotation);
-        return outPoint
+    direction(out= new Vec2(0, 0)) {
+        out.x = Math.cos(this.rotation);
+        out.y = Math.sin(this.rotation);
+        return out;
     }
 
     /**

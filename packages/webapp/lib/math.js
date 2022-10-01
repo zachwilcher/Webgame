@@ -1,4 +1,3 @@
-import '@pixi/math-extras';
 
 export class Vec2 {
     /**
@@ -11,7 +10,58 @@ export class Vec2 {
      */
     y;
 
+    /**
+     * @param x {number}
+     * @param y {number}
+     */
     constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * @param other {{x: number, y: number}}
+     * @returns {Vec2}
+     */
+    static from(other) {
+        return new Vec2(other.x, other.y);
+    }
+
+    /**
+     * @returns {Vec2}
+     */
+    clone() {
+        return new Vec2(this.x, this.y);
+    }
+
+    /**
+     * @param other {{x: number, y: number}}
+     */
+    equals(other) {
+        return (this.x === other.x) && (this.y === other.y);
+    }
+
+    /**
+     * @param other {{x: number, y: number}}
+     */
+    copyTo(other) {
+        other.x = this.x;
+        other.y = this.y;
+    }
+
+    /**
+     * @param other {{x: number, y: number}}
+     */
+    copyFrom(other) {
+        this.x = other.x;
+        this.y = other.y;
+    }
+
+    /**
+     * @param x {number}
+     * @param y {number}
+     */
+    set(x = 0, y = x) {
         this.x = x;
         this.y = y;
     }
@@ -25,7 +75,7 @@ export class Vec2 {
 
     /**
      * @param rotation {number} angle in radians
-     * @returns {Vec2} new rotated vector
+     * @returns {Vec2} new vector rotated counter-clockwise by rotation
      */
     rotate(rotation) {
         const sin = Math.sin(rotation);

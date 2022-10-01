@@ -1,44 +1,92 @@
-import {Container} from "pixi.js";
+import { Sprite } from '@pixi/sprite';
+import { degrees, radians } from "./math.js";
 
 export const TILE_SIZE = 10;
 
-export class TileGrid extends Container {
 
+export class TileType {
 
-    constructor() {
-        super();
-    }
-
-    get tileWidth() {
-        return TILE_SIZE;
-    }
-
-    get tileHeight() {
-        return TILE_SIZE;
-    }
+    texture;
 
     /**
-     * @param x {number} local x
-     * @param y {number} local y
-     * @returns {Sprite} tile
+     * @param texture {PIXI.Texture}
      */
-    getTile({x, y}) {
-        const nX = Math.floor(x / this.tileWidth) * this.tileWidth;
-        const nY = Math.floor(y / this.tileHeight) * this.tileHeight;
-        return this.children.find((tile) => ((tile.x === nX) && (tile.y === nY)));
+    constructor(texture) {
+        this.texture = texture;
     }
 
+
     /**
-     * @param x {number} local x
-     * @param y {number} local y
-     * @param tile {Sprite}
+     * @returns {PIXI.Sprite}
      */
-    setTile({x, y}, tile) {
-        const nX = Math.floor(x / this.tileWidth) * this.tileWidth;
-        const nY = Math.floor(y / this.tileHeight) * this.tileHeight;
-        tile.x = nX;
-        tile.y = nY;
-        this.addChild(tile);
+    sprite() {
+        const sprite = new Sprite(this.texture);
+
+
+        return sprite;
+    }
+}
+
+
+export class TileBuilder {
+
+    /**
+     * @type {number}
+     */
+    tileAnchor = 0;
+
+    /**
+     * @type {boolean}
+     */
+    interactive = false;
+
+    /**
+     * @type {boolean}
+     */
+    buttonMode = false;
+
+    /**
+     * @type {TileType}
+     */
+    tileType = null;
+
+    /**
+     * @type {number}
+     */
+    tileScale = 1;
+
+    /**
+     * @type {number}
+     */
+    rotation = 0;
+
+    set angle(value) {
+        this.rotation = radians(value);
+    }
+
+    get angle() {
+        return degrees(this.rotation);
+    }
+
+    constructor(tileType) {
+        this.tileType = tileType
+    }
+
+    create() {
+        const sprite = this.tileType.sprite();
+        sprite.anchor.set(this.tileAnchor);
+        sprite.interactive =  this.interactive;
+        sprite.buttonMode = this.buttonMode;
+        sprite.scale.set(this.tileScale);
+        sprite.rotation = this.rotation;
+        return sprite;
+    }
+
+    createAt(x, y) {
+        const sprite = this.create();
+        sprite.x = x;
+        sprite.y = y;
+        return sprite;
     }
 
 

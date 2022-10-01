@@ -2,13 +2,15 @@ import {Game, GAME_MODES} from "./lib/game.js";
 
 const gameContainer = document.body.querySelector('.game-container');
 
-const fullscreenButton = document.body.querySelector('#fullscreen');
-fullscreenButton.addEventListener('click', () => {
-    gameContainer.requestFullscreen();
-});
-
 const canvas = document.body.querySelector('#game-canvas');
 const game = new Game({view: canvas, resizeTo: gameContainer, backgroundColor: 0x1177bb});
+
+const fullscreenButton = document.body.querySelector('#fullscreen');
+fullscreenButton.addEventListener('click', () => {
+    gameContainer.requestFullscreen().then(() => {
+        game.resize();
+    });
+});
 
 const flyButton = document.body.querySelector('#fly');
 flyButton.addEventListener('click', () => {
@@ -19,3 +21,7 @@ buildButton.addEventListener('click', () => {
    game.setMode(GAME_MODES.BUILD);
 });
 
+const clearButton = document.body.querySelector('#clear');
+clearButton.addEventListener('click', () => {
+    game.clear();
+});
