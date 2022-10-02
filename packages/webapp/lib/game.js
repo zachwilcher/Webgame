@@ -1,7 +1,7 @@
-import {TileBuilder, TileType} from "./tile.js";
-import {TileGrid} from "./tileGrid.js";
 import * as PIXI from 'pixi.js';
-
+import TileGrid from "./tile/tileGrid.js";
+import {BLANK_TILE, BORDERED_TILE, ORNATE_TILE} from "./tileTypes.js";
+import {Rectangle} from "pixi.js";
 
 export const GAME_MODES = {
     FLY: "FLY",
@@ -16,81 +16,81 @@ export class Game {
     mode;
 
     /**
-     * @type {Application}
+     * @type {PIXI.Application}
      */
     app;
 
-    started = false;
 
-    tileBuilder;
+    /**
+     * @type {TileGrid}
+     */
+    toolboxGrid;
 
-    tileGrid;
+
+    /**
+     * @type {TileGrid}
+     */
+    sandboxGrid;
+
+    /**
+     * @type {TileBuilder}
+     */
+    sandboxBuilder;
 
     constructor({view, resizeTo, backgroundColor}) {
 
-        const app = new PIXI.Application({view, backgroundColor, resizeTo});
-        this.app = app;
+        this.app = new PIXI.Application({view, backgroundColor, resizeTo});
 
-        const borderedTileTexture = PIXI.Texture.from('./assets/borderTile.png');
-        const ornateTileTexture = PIXI.Texture.from('./assets/ornateTile.png');
-        const blankTileTexture = PIXI.Texture.from('./assets/blankTile.png');
+        // configure app stage
+        this.app.stage.interactive = true;
+        this.app.stage.hitArea = this.app.renderer.screen;
 
-        const borderedTileType = new TileType(borderedTileTexture);
-        const ornateTileType = new TileType(ornateTileTexture);
-        const blankTileType = new TileType(blankTileTexture);
 
-        app.stage.interactive = true;
-        app.stage.hitArea = app.renderer.screen;
+        this.sandboxGrid = new TileGrid(10);
+        this.sandboxGrid.interactive = true;
+        this.sandboxGrid.hitArea = new PIXI.Rectangle(-100, 0, this.app.renderer.width, this.app.renderer.height);
+        this.sandboxGrid.x = 100;
+        this.app.stage.addChild(this.sandboxGrid);
 
-        this.tileBuilder = new TileBuilder(borderedTileType);
-        const tileBuilder = this.tileBuilder;
-        tileBuilder.tileScale = 2;
-        tileBuilder.interactive = true;
-        tileBuilder.buttonMode = true;
+        this.sandboxBuilder = this.sandboxGrid.createBuilder();
+        this.sandboxBuilder.tileType = BLANK_TILE;
 
-        // create tile toolbox
+        this.toolboxGrid = new TileGrid(20);
+        this.app.stage.addChild(this.toolboxGrid);
+        const toolboxBuilder = this.toolboxGrid.createBuilder();
+        toolboxBuilder.interactive = true;
+        toolboxBuilder.buttonMode = true;
 
-        let sprite;
-        sprite = tileBuilder.createAt(0, 50);
-        sprite.addListener('pointertap', event => {
-            tileBuilder.tileType = borderedTileType;
+        toolboxBuilder.tileType = BORDERED_TILE;
+        this.toolboxGrid.createAt({x: 0, y: 50}, toolboxBuilder).addListener('pointertap', () => {
+            console.log('bordered tile selected!');
+            this.sandboxBuilder.tileType = BORDERED_TILE;
         });
-        app.stage.addChild(sprite);
 
-        tileBuilder.tileType = ornateTileType;
-        sprite = tileBuilder.createAt(0, 150);
-        sprite.addListener('pointertap', event => {
-            tileBuilder.tileType = ornateTileType;
+        toolboxBuilder.tileType = BLANK_TILE;
+        this.toolboxGrid.createAt({x: 0, y: 150}, toolboxBuilder).addListener('pointertap', () => {
+            console.log('blank tile selected!');
+            this.sandboxBuilder.tileType = BLANK_TILE;
         });
-        app.stage.addChild(sprite);
 
-        tileBuilder.tileType = blankTileType;
-        sprite = tileBuilder.createAt(0, 250);
-        sprite.addListener('pointertap', event => {
-            tileBuilder.tileType = blankTileType;
+        toolboxBuilder.tileType = ORNATE_TILE;
+        this.toolboxGrid.createAt({x: 0, y: 250}, toolboxBuilder).addListener('pointertap', () => {
+            console.log('ornate tile selected!');
+            this.sandboxBuilder.tileType = ORNATE_TILE;
         });
-        app.stage.addChild(sprite);
 
-        tileBuilder.tileScale = 1;
+        const sandboxGrid = this.sandboxGrid;
+        const sandboxBuilder = this.sandboxBuilder;
 
-
-        // tileGrid is where stuff is placed you know like the sandbox itself
-        this.tileGrid = new TileGrid();
-        const tileGrid = this.tileGrid;
-
-        app.stage.addChild(tileGrid);
-
-
-        app.stage.addListener('pointertap', event => {
-            console.log(event.data.global);
-            const pos = tileGrid.toLocal(event.data.global);
-            const tile = tileGrid.getTile(pos);
-            if (!tile) {
-                tileGrid.setTile(pos, tileBuilder.create());
+        sandboxGrid.addListener('pointertap', event => {
+            const point = sandboxGrid.toLocal(event.data.global);
+            if(!sandboxGrid.getTile(point)) {
+                sandboxGrid.createAt(point, sandboxBuilder);
             }
-        });
+        })
 
-        this.started = true;
+
+
     }
 
     /**
@@ -105,13 +105,11 @@ export class Game {
     }
 
     resize() {
-        if(this.started) {
-            this.app.resize();
-        }
+        this.app.resize();
     }
 
     clear() {
-        this.tileGrid.removeChildren();
+
     }
 
 }

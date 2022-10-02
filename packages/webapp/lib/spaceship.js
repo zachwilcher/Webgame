@@ -1,6 +1,7 @@
 
 import {PhysicsObject} from "./physics.js";
-import {TILE_SIZE} from "./tile.js";
+import {TILE_SIZE} from "./tile/tile.js";
+import {UnimplementedMethodError} from "./util.js";
 
 
 class SpaceshipTileVisitor {
@@ -9,7 +10,7 @@ class SpaceshipTileVisitor {
      * @param tile {SpaceshipHull}
      */
     visitHull(tile) {
-
+        throw new UnimplementedMethodError();
     }
 
     /**
@@ -17,7 +18,7 @@ class SpaceshipTileVisitor {
      * @param tile {SpaceshipController}
      */
     visitController(tile) {
-
+        throw new UnimplementedMethodError();
     }
 
 
@@ -26,7 +27,7 @@ class SpaceshipTileVisitor {
      * @param tile {SpaceshipThruster}
      */
     visitThruster(tile) {
-
+        throw new UnimplementedMethodError();
     }
 }
 

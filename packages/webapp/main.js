@@ -16,6 +16,7 @@ const flyButton = document.body.querySelector('#fly');
 flyButton.addEventListener('click', () => {
     game.setMode(GAME_MODES.FLY);
 });
+
 const buildButton = document.body.querySelector('#build');
 buildButton.addEventListener('click', () => {
    game.setMode(GAME_MODES.BUILD);
