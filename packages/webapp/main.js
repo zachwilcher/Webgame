@@ -3,7 +3,12 @@ import {Game, GAME_MODES} from "./lib/game.js";
 const gameContainer = document.body.querySelector('.game-container');
 
 const canvas = document.body.querySelector('#game-canvas');
-const game = new Game({view: canvas, resizeTo: gameContainer, backgroundColor: 0x1177bb});
+const game = new Game({
+    view: canvas,
+    resizeTo: canvas,
+    backgroundColor: 0x1177bb,
+    storage: window.localStorage
+});
 
 const fullscreenButton = document.body.querySelector('#fullscreen');
 fullscreenButton.addEventListener('click', () => {
@@ -25,4 +30,14 @@ buildButton.addEventListener('click', () => {
 const clearButton = document.body.querySelector('#clear');
 clearButton.addEventListener('click', () => {
     game.clear();
+});
+
+const saveButton = document.body.querySelector('#save');
+saveButton.addEventListener('click', () => {
+    game.saveBuilding();
+});
+
+const loadButton = document.querySelector('#load');
+loadButton.addEventListener('click', () => {
+   game.loadBuilding();
 });

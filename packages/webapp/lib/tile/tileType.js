@@ -2,6 +2,8 @@ import * as PIXI from "pixi.js";
 
 export default class TileType {
 
+    name;
+
     /**
      * @type {PIXI.Texture}
      */
@@ -17,13 +19,14 @@ export default class TileType {
     /**
      * @param texture {PIXI.Texture}
      */
-    constructor(texture) {
+    constructor(texture, name) {
         this.texture = texture;
+        this.name = name;
     }
 
-    createSprite() {
+    createSprite(data = {}) {
         const sprite = new PIXI.Sprite(this.texture);
-
+        sprite.tileType = this;
         return sprite;
     }
 

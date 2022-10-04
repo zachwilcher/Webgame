@@ -1,8 +1,7 @@
 import * as PIXI from 'pixi.js';
 import TileGrid from "./tile/tileGrid.js";
-import {BLANK_TILE, BORDERED_TILE, ORNATE_TILE} from "./tileTypes.js";
-import {Rectangle} from "pixi.js";
-
+import * as TileTypes from "./tileTypes.js";
+const {BLANK_TILE, BORDERED_TILE, ORNATE_TILE} = TileTypes;
 export const GAME_MODES = {
     FLY: "FLY",
     BUILD: "BUILD"
@@ -20,6 +19,10 @@ export class Game {
      */
     app;
 
+    /**
+     * @type {Storage}
+     */
+    storage;
 
     /**
      * @type {TileGrid}
@@ -37,14 +40,51 @@ export class Game {
      */
     sandboxBuilder;
 
-    constructor({view, resizeTo, backgroundColor}) {
+    spaceship;
+
+    constructor({view, resizeTo, backgroundColor, storage}) {
 
         this.app = new PIXI.Application({view, backgroundColor, resizeTo});
 
+        this.storage = storage;
+        this.mode = GAME_MODES.BUILD;
+        this.setupBuildMode();
+
+
+
+    }
+
+    /**
+     * @param mode
+     */
+    setMode(mode) {
+        if(!GAME_MODES[mode]) {
+            throw new Error(`${mode} is not a valid game mode.`);
+        }
+        this.mode = mode;
+
+    }
+
+    loadBuilding() {
+        const tileData = JSON.parse(this.storage.getItem('tiles'));
+        for(const tile of tileData) {
+            this.sandboxBuilder.tileType = TileTypes[tile.type];
+            this.sandboxGrid.createAt(tile.position, this.sandboxBuilder);
+        }
+    }
+
+    saveBuilding() {
+        const tiles = this.sandboxGrid.children.map(tile => ({
+            type: tile.tileType.name,
+            position: {x: tile.position.x, y: tile.position.y}
+        }));
+        this.storage.setItem('tiles', JSON.stringify(tiles));
+    }
+
+    setupBuildMode() {
         // configure app stage
         this.app.stage.interactive = true;
         this.app.stage.hitArea = this.app.renderer.screen;
-
 
         this.sandboxGrid = new TileGrid(10);
         this.sandboxGrid.interactive = true;
@@ -87,21 +127,7 @@ export class Game {
             if(!sandboxGrid.getTile(point)) {
                 sandboxGrid.createAt(point, sandboxBuilder);
             }
-        })
-
-
-
-    }
-
-    /**
-     * @param mode
-     */
-    setMode(mode) {
-        if(!GAME_MODES[mode]) {
-            throw new Error(`${mode} is not a valid game mode.`);
-        }
-        this.mode = mode;
-
+        });
     }
 
     resize() {
@@ -109,7 +135,7 @@ export class Game {
     }
 
     clear() {
-
+        this.sandboxGrid.removeChildren();
     }
 
 }
