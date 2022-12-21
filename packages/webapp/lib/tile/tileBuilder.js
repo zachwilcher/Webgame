@@ -1,36 +1,48 @@
 import {radians, degrees} from "../math.js";
 
+/**
+ * @typedef TileBuilderOptions {Object}
+ * @property alpha {number}
+ * @property
+ */
+
+
 export default class TileBuilder {
 
     /**
      * @type {number}
      */
-    tileAnchor = 0;
+    tileAnchor;
 
     /**
      * @type {boolean}
      */
-    interactive = false;
+    interactive;
 
     /**
      * @type {boolean}
      */
-    buttonMode = false;
+    buttonMode;
 
     /**
      * @type {TileType}
      */
-    tileType = null;
+    tileType;
 
     /**
      * @type {number}
      */
-    tileSize = 10;
+    tileSize;
 
     /**
      * @type {number}
      */
-    rotation = 0;
+    rotation;
+
+    /**
+     * @type {{x: number, y: number}}
+     */
+    position;
 
     set angle(value) {
         this.rotation = radians(value);
@@ -40,10 +52,56 @@ export default class TileBuilder {
         return degrees(this.rotation);
     }
 
-    constructor() {
+    constructor(options) {
+        this.configure({
+            tileAnchor: 0,
+            interactive: false,
+            buttonMode: false,
+            tileType: null,
+            tileSize: 10,
+            rotation: 0,
+            position: {x: 0, y: 0},
+            ...options
+        });
     }
 
-    create() {
+    configure(options) {
+        if(options.tileAnchor) {
+            this.tileAnchor = options.tileAnchor;
+        }
+
+        if(options.interactive) {
+            this.interactive = !!options.interactive;
+        }
+
+        if(options.buttonMode) {
+            this.buttonMode = !!options.buttonMode;
+        }
+
+        if(options.tileType) {
+            this.tileType = options.tileType;
+        }
+
+        if(options.tileSize) {
+            this.tileSize = options.tileSize;
+        }
+
+        if(options.rotation && !options.angle) {
+            this.rotation = options.rotation;
+        }
+
+        if(options.angle && !options.rotation) {
+            this.angle = options.angle;
+        }
+
+        if(options.position) {
+            this.position = options.position;
+        }
+
+
+    }
+
+    create(options) {
         if(this.tileType) {
             const sprite = this.tileType.createSprite();
             sprite.anchor.set(this.tileAnchor);
@@ -58,10 +116,8 @@ export default class TileBuilder {
         throw new Error('TileType must be specified');
     }
 
-    createAt({x, y}) {
-        const sprite = this.create();
-        sprite.x = x;
-        sprite.y = y;
-        return sprite;
+    createAt(point) {
+        this.position = {x: point.x, y: point.y};
+        return this.create();
     }
 }

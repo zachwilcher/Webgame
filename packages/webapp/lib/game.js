@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import TileGrid from "./tile/tileGrid.js";
 import * as TileTypes from "./tileTypes.js";
 const {BLANK_TILE, BORDERED_TILE, ORNATE_TILE} = TileTypes;
+
 export const GAME_MODES = {
     FLY: "FLY",
     BUILD: "BUILD"
@@ -50,8 +51,6 @@ export class Game {
         this.mode = GAME_MODES.BUILD;
         this.setupBuildMode();
 
-
-
     }
 
     /**
@@ -62,7 +61,6 @@ export class Game {
             throw new Error(`${mode} is not a valid game mode.`);
         }
         this.mode = mode;
-
     }
 
     loadBuilding() {
